@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        button {
+            padding: 10px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-family: "微軟正黑體";
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>子層通知父層的方法另一個寫法</h2>
+        (讓total無條件+1，包含庫存數量已經歸0之後再按下這個按鈕，total的數量還是會不斷增加)
+        <h2>Order quantity : {{ state.total2 }}</h2>
+        <vuebutton title="iPhone" :start="5" @click="state.total2++"></vuebutton>
+        <vuebutton title="iPad" :start="10" @click="state.total2++"></vuebutton>
+        <hr>
+        <h2>子層通知父層的方法emit</h2>
+        (子層透過emit來傳遞事件給父層)
+        <h2>Order quantity : {{ state.total }}</h2>
+        <vuebutton title="iPhone" :start="5" @vuebutton-click="countTotal"></vuebutton>
+        <vuebutton title="iPad" :start="10" @vuebutton-click="countTotal"></vuebutton>
+    </div>
+</body>
+
+</html>
+
+<script>
+const { reactive } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            total: 0,
+            total2: 0,
+        })
+        function countTotal(){
+            state.total ++;
+        }
+        return { state, countTotal }
+    }
+}
+const myVue = Vue.createApp(app);
+
+myVue.component("vuebutton", {
+    props: {
+        title: {
+            type: String,
+            required: true,
+        },
+        start: {
+            type: Number,
+            default: 0,
+        },
+    },
+    template: `<button @click="minus">{{ state.title }} 庫存 {{ state.start }} 件</button>`,
+    setup(props, target){ //第二個參數target，就是上層對象
+        const state = reactive({
+            title: props.title,
+            start: props.start,
+        })
+        function minus(){
+            if (state.start <= 0) {
+                state.start = 0;
+            } else {
+                state.start--;
+                target.emit("vuebutton-click");
+            }
+        }
+        return{ state, minus }
+    },
+})
+myVue.mount("#app");
+</script>

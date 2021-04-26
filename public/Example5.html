@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app" style="display:flex">
+    <div style="width: 50%;">
+        <p><input v-model="state.inputValue"></p>
+        <p><input v-model.lazy="state.inputValue2" placeholder="onChange時才會觸發更新"></p>
+        <p><input v-model.trim="state.inputValue3" placeholder="去除欄位中的前後空白字元"></p>
+        <p><input type="number" v-model.number="state.inputValue4" placeholder="將輸入值轉換為數值格式"></p>
+        <p>
+            <input type="checkbox" v-model="state.checkboxValue" id="Item1" value="Item1">
+            <label for="Item1">Item1</label>
+            <input type="checkbox" v-model="state.checkboxValue" id="Item2" value="Item2">
+            <label for="Item2">Item2</label>
+            <input type="checkbox" v-model="state.checkboxValue" id="Item3" value="Item3">
+            <label for="Item3">Item3</label>
+        </p>
+        <p>
+            <input type="radio" id="Frontend" value="Frontend" v-model="state.radioValue">
+            <label for="Frontend">Frontend</label>
+            <input type="radio" id="Backend" value="Backend" v-model="state.radioValue">
+            <label for="Backend">Backend</label>
+        </p>
+        <p>
+            <select v-model="state.selectValue">
+                <option disabled value="" selected>Please select one</option>
+                <option value="Option1">Option1</option>
+                <option value="Option2">Option2</option>
+                <option value="Option3">Option3</option>
+            </select>
+        </p>
+        <p><textarea v-model="state.textareaValue"></textarea></p>
+    </div>
+    <div style="width: 50%;">
+        <p>Input: {{ state.inputValue }}</p>
+        <p>Input: {{ state.inputValue2 }}</p>
+        <p>Input: {{ state.inputValue3 }}</p>
+        <p>Input: {{ state.inputValue4 }}</p>
+        <p>Checkbox: {{ state.checkboxValue }}</p>
+        <p>Radio: {{ state.radioValue }}</p>
+        <p>Select: {{ state.selectValue }}</p>
+        <p>Textarea: {{ state.textareaValue }}</p>
+    </div>
+    </div>
+<!--
+v-model.lazy: 在文字方塊onChange時才會觸發更新。
+v-model.number: 將輸入值轉換為數值格式。
+v-model.trim: 去除欄位中的前後空白字元。
+-->
+</body>
+</html>
+<script>
+const { reactive } = Vue;
+const app = {
+    setup() {
+        const state = reactive({
+            inputValue: "",
+            inputValue2: "",
+            inputValue3: "",
+            inputValue4: "",
+            checkboxValue: [],
+            radioValue: "",
+            selectValue: "",
+            textareaValue: "",
+        })
+        return {
+            state
+        };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

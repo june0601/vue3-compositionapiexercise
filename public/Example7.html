@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <ul>
+        <li v-for="(value, name, index) in state.frameworks">
+            {{ index + 1 }}. {{ name }} - {{ value }}
+        </li>
+    </ul>
+    <hr>
+    <h3>Please make your choice:(tag中加入key屬性更新下拉選單HTML)</h3>
+    <ul>
+        <li v-for="item in state.names" :key="item.title">
+            {{ item.title }} : 
+            <select>
+                <option disabled value="" selected>Please select one</option>
+                <option v-for="(item, index) in state.types" :value="item.value">{{ item.title }}</option>
+            </select>
+        </li>
+    </ul>
+    <hr>
+    <h3>Please make your choice:(下拉選單HTML沒更新)</h3>
+    <ul>
+        <li v-for="item in state.names">
+            {{ item.title }} : 
+            <select>
+                <option disabled value="" selected>Please select one</option>
+                <option v-for="(item, index) in state.types" :value="item.value">{{ item.title }}</option>
+            </select>
+        </li>
+    </ul>
+    <hr>
+    <p>
+        <button @click="sortASC">Sort by Name ASC</button>
+        <button @click="sortDESC">Sort by Name DESC</button>
+    </p>
+    </div>
+</body>
+</html>
+<script>
+const { reactive } = Vue;
+const app = {
+    setup() {
+        const state = reactive({
+            names:[
+                {title: "Vue", value: "Vue"},
+                {title: "React", value: "React"},
+                {title: "Angular", value: "Angular"},
+                {title: "Laravel", value: "Laravel"},
+                {title: "CakePHP", value: "CakePHP"},
+                {title: "Django", value: "Django"},
+            ],
+            types:[
+                {title: "Frontend", value: "Frontend"},
+                {title: "Backend", value: "Backend"},
+            ],
+            frameworks: {
+                Vue: "Frontend",
+                React: "Frontend",
+                Angular: "Frontend",
+                Laravel: "Backend",
+                CakePHP: "Backend",
+                Django: "Backend",
+            },
+        })
+        function sortASC() {
+            state.names = state.names.sort(function (a, b) {
+                return a.title > b.title ? 1 : -1;
+            });
+        }
+        function sortDESC() {
+            state.names = state.names.sort(function (a, b) {
+                return b.title > a.title ? 1 : -1;
+            });
+        }
+        return { state, sortASC, sortDESC};
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

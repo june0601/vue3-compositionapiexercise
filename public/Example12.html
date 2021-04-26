@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        .noteText{
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+    <h3>Please make your decision:</h3>
+    <p>
+        Gender:
+        <select v-model="state.genderIdx">
+            <option v-for="(item, index) in state.clothes" :value="index">
+                {{item.gender}}
+            </option>
+        </select>
+    </p>
+    <p>
+        Type:
+        <select v-model="state.partIdx">
+            <option v-for="(item, index) in pickTypes" :value="index">
+                {{item.part}}
+            </option>
+        </select>
+    </p>
+    <p>
+        Product:
+        <select v-model="state.itemIdx">
+            <option v-for="(item, index) in pickParts" :value="index">
+                {{item.product}}
+            </option>
+        </select>
+    </p>
+        <hr>
+        <h3>Please select your favorite framework:</h3>
+        <p>
+            Type:
+            <select v-model="state.frameworksIdx">
+                <option v-for="(item, index) in state.frameworks" :value="index">
+                    {{item.type}}
+                </option>
+            </select>
+        </p>
+        <p>
+            Name:
+            <select v-model="state.contentsIdx">
+                <option v-for="(item, index) in pickContents" :value="index">
+                    {{item.name}}
+                </option>
+            </select>
+        </p>
+        <div class="noteText">
+            <p>
+                你選擇的框架類型是：{{ state.frameworks[state.frameworksIdx].type }} - 
+                {{ state.frameworks[state.frameworksIdx].contents[state.contentsIdx].name }}
+            </p>
+            <p>官方網站：{{ state.frameworks[state.frameworksIdx].contents[state.contentsIdx].website }}</p>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    const { reactive, computed, watch } = Vue;
+    const app = {
+        setup(){
+            const state = reactive({
+                frameworksIdx: 0, // 記錄第一層選單的被選取項目
+                contentsIdx: 0, // 記錄第二層選單的被選取項目
+                frameworks : [
+                    {
+                        type: 'Frontend',
+                        contents: [
+                            { name: 'Vue', website: 'https://vuejs.org/' },
+                            { name: 'React', website: 'https://reactjs.org/' },
+                            { name: 'Angular', website: 'https://angular.io/' },
+                        ],
+                    },
+                    {
+                        type: 'Backend',
+                        contents: [
+                            { name: 'Laravel', website: 'https://laravel.com/' },
+                            { name: 'CakePHP', website: 'https://cakephp.org/' },
+                            { name: 'Django', website: 'https://www.djangoproject.com/' },
+                            { name: 'Ruby on Rails', website: 'https://rubyonrails.org/' },
+                        ],
+                    },
+                ],
+                genderIdx: 0, // 記錄第一層選單的被選取項目
+                partIdx: 0, // 記錄第二層選單的被選取項目
+                itemIdx: 0, // 記錄第三層選單的被選取項目
+                clothes : [
+                {
+                    gender: "男",
+                    types: [
+                        {
+                            part: "上衣類",
+                            contents: [
+                                { product: "短袖/背心" },
+                                { product: "長袖" },
+                                { product: "立領/高領" },
+                                { product: "針織衫" },
+                                { product: "休閒襯衫" },
+                                { product: "商務襯衫" },
+                                { product: "法蘭絨系列" },
+                                { product: "厚棉系列" },
+                            ],
+                        },
+                        {
+                            part: "外套類",
+                            contents: [
+                                { product: "休閒外套" },
+                                { product: "Fleece系列" },
+                                { product: "極輕羽絨" },
+                                { product: "極暖羽絨" },
+                            ],
+                        },
+                        {
+                            part: "下身類",
+                            contents: [
+                                { product: "短/七分褲" },
+                                { product: "九分/束口褲" },
+                                { product: "休閒長褲" },
+                                { product: "牛仔褲" },
+                                { product: "保暖褲" },
+                            ],
+                        },
+                        {
+                            part: "家居服",
+                            contents: [
+                                { product: "家居套裝" },
+                                { product: "家居褲" },
+                                { product: "家居毯" },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    gender: "女",
+                    types: [
+                        {
+                            part: "上衣類",
+                            contents: [
+                                { product: "印花短T" },
+                                { product: "印花長T" },
+                                { product: "短袖/背心" },
+                                { product: "七分/長袖" },
+                                { product: "長版上衣" },
+                                { product: "針織衫" },
+                                { product: "polo衫" },
+                                { product: "Pima棉" },
+                            ],
+                        },
+                        {
+                            part: "外套類",
+                            contents: [
+                                { product: "休閒外套" },
+                                { product: "Fleece系列" },
+                                { product: "極輕羽絨" },
+                                { product: "極暖羽絨" },
+                            ],
+                        },
+                        {
+                            part: "下身類",
+                            contents: [
+                                { product: "休閒短褲" },
+                                { product: "七/九分褲" },
+                                { product: "牛仔系列" },
+                                { product: "寬褲系列" },
+                                { product: "休閒長褲" },
+                                { product: "裙子" },
+                                { product: "連身/吊帶褲" },
+                                { product: "緊身褲" },
+                                { product: "裙子" },
+                            ],
+                        },
+                        {
+                            part: "洋裝",
+                            contents: [
+                                { product: "洋裝" },
+                                { product: "家居褲" },
+                                { product: "吊帶裙" },
+                            ],
+                        },
+                    ],
+                },
+                ],
+            })
+            const pickContents = computed(() => {
+                return state.frameworks[state.frameworksIdx].contents;
+            })
+            watch(() => state.frameworksIdx, (value) =>{
+                state.contentsIdx = 0;
+            })
+            const pickTypes = computed(() => {
+            return state.clothes[state.genderIdx].types;
+            })
+            const pickParts = computed(() => {
+                return state.clothes[state.genderIdx].types[state.partIdx].contents;
+            })
+            watch(() => state.genderIdx, (value) =>{
+                state.partIdx = 0;
+            })
+            watch(() => state.genderIdx, (value) =>{
+                state.itemIdx = 0;
+            })
+            return { state, pickContents, pickTypes, pickParts };
+        }
+    }
+    const myVue = Vue.createApp(app).mount("#app");
+</script>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <div class="header">
+        <div class="nav">
+            <form @keydown.prevent><!--會擋住在表單範圍內按下Enter鍵之後，自動送出表單的功能-->
+                <input type="text" @keydown.ctrl.enter="ctrlEnterFn" placeholder="Ctrl + Enter"> <!--使用者在此input中按下Ctrl + Enter時會觸發enterFn-->
+                <input type="text" @keydown.enter="enterFn" placeholder="Enter">
+                <button @click.prevent.alt.exact="clickFn" title="Alt + 滑鼠左鍵">檢查</button> <!--使用者在需要按下鍵盤上的Alt + 滑鼠左鍵點擊按鈕才會觸發ClickFn，若將其中exact的部分拿掉，則按下鍵盤Alt + Shift + 左鍵，也會觸發該函數。-->
+            </form>
+            <p>字串框請按下Control + Enter ； Enter ； 按鈕處 Alt + 滑鼠左鍵進行測試</p>
+        </div>
+        <hr>
+        <div class="nav" @click.capture="navFn">
+            <form>
+                <p>透過@click.capture=”navFn”，就能夠做到先將本身觸發的函數先執行完畢後再下傳事件的效果</p>
+                <input type="submit" @click.prevent.stop="submitFn" value="Submit">
+                <input type="button" @click.stop="clearFn" value="Clear">
+            </form>
+        </div>
+        <hr>
+        <div class="nav" @click="navFn">
+            <form>
+                <p>使用stopPropagation阻止事件的上傳</p>
+                <input type="submit" @click.prevent.stop="submitFn" value="Submit">
+                <input type="button" @click.stop="clearFn" value="Clear">
+            </form>
+        </div>
+        <hr>
+        <div class="nav" @click="navFn">
+            <form>
+                <p>使用preventDefault來阻止觸發預設的事件</p>
+                <input type="submit" @click.prevent="submitFn" value="Submit">
+                <input type="button" @click="clearFn" value="Clear">
+            </form>
+        </div>
+        <hr>
+        <div class="nav">
+            <form>
+                <p>閃爍一段字出來之後馬上消失</p>
+                <input type="submit" @click="submitFn" value="Submit">
+                <input type="button" @click="clearFn" value="Clear">
+                
+            </form>
+        </div>
+        <hr>
+    </div>
+    <div v-html="state.action"></div>
+    </div>
+
+<!--
+vue事件修飾符：
+.stop
+.prevent
+.capture
+.self
+.once
+.passive
+-->
+
+<!-- 阻止事件的傳遞 -->
+<!-- <a @click.stop="doSomething">...</a> -->
+<!-- 觸發Submit事件時不重新整理頁面 -->
+<!-- <form @submit.prevent="doSomething">...</form> -->
+<!-- 處理完畢後再將事件往下傳 -->
+<!-- <div @click.capture="doSomething">...</div> -->
+<!-- 只在被點擊對象是自己的時候執行 -->
+<!-- <div @click.self="doSomething">...</div> -->
+<!-- 僅第一次按下時觸發動作 -->
+<!-- <a @click.once="doSomething">...</div> -->
+<!-- 捲動預設行為將立刻被觸發，不會等待doSomething完成，藉以提升行動裝置的效能 -->
+<!-- <div @scroll.passive="doSomething">...</div> -->
+
+
+<!-
+常用的按鍵名稱：
+enter
+tab
+delete
+esc
+space
+up
+down
+left
+right
+ctrl
+alt
+shift
+meta：Mac的Command鍵、Windows的Windows鍵
+left：滑鼠左鍵
+right：滑鼠右鍵
+middle：滑鼠中鍵
+-->
+</body>
+</html>
+<script>
+const { reactive } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            action: "",
+        });
+        function submitFn() {
+            state.action += "表單送出<br>";
+        }
+        function navFn() {
+            state.action += "選單點選<br>";
+        }
+        function clearFn() {
+            state.action = "";
+        }
+        function ctrlEnterFn(){
+            state.action += "按下鍵盤Control + Enter鍵<br>";
+        }
+        function clickFn(){
+            state.action += "按下鍵盤Alt + 滑鼠左鍵<br>";
+        }
+        function enterFn(){
+            state.action += "按下鍵盤Enter鍵<br>";
+        }
+        return { state, submitFn, navFn, clearFn,enterFn,clickFn,ctrlEnterFn };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

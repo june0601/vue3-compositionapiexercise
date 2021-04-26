@@ -1,0 +1,74 @@
+{
+  "system": [
+    {
+      "id": 0,
+      "title": "請選擇手機系統",
+      "value": "",
+      "disabled": true,
+      "default": true
+    },
+    {
+      "id": 1,
+      "title": "Android",
+      "value": "Android"
+    },
+    {
+      "id": 2,
+      "title": "iOS",
+      "value": "iOS"
+    }
+  ],
+  "provider": [
+    {
+      "id": 0,
+      "title": "請選擇電信業者",
+      "value": "",
+      "disabled": true,
+      "default": true
+    },
+    {
+      "id": 1,
+      "title": "中華電信",
+      "value": "CHT"
+    },
+    {
+      "id": 2,
+      "title": "台灣大哥大",
+      "value": "TWN"
+    },
+    {
+      "id": 3,
+      "title": "遠傳",
+      "value": "FET"
+    }
+  ],
+  "plans": [
+    {
+      "id": 0,
+      "title": "請選擇月租費用",
+      "value": "",
+      "disabled": true,
+      "default": true
+    },
+    {
+      "id": 1,
+      "title": "300以下",
+      "value": "1"
+    },
+    {
+      "id": 2,
+      "title": "301～500",
+      "value": "2"
+    },
+    {
+      "id": 3,
+      "title": "501～1000",
+      "value": "3"
+    },
+    {
+      "id": 3,
+      "title": "1000以上",
+      "value": "4"
+    }
+  ]
+}

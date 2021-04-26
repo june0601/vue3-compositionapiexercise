@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <style>
+        .noteText {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h3>Please make your decision:</h3>
+        <p>
+            Gender:
+            <select v-model="state.genderIdx">
+                <option v-for="(item, index) in state.clothes" :value="index">
+                    {{item.gender}}
+                </option>
+            </select>
+        </p>
+        <p>
+            Type:
+            <select v-model="state.partIdx">
+                <option v-for="(item, index) in pickTypes" :value="index">
+                    {{item.part}}
+                </option>
+            </select>
+        </p>
+        <p>
+            Product:
+            <select v-model="state.itemIdx">
+                <option v-for="(item, index) in pickContents" :value="index">
+                    {{item.product}}
+                </option>
+            </select>
+        </p>
+    </div>
+</body>
+
+</html>
+<script>
+const { reactive, onBeforeMount, computed } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            genderIdx: 0, // 記錄第一層選單的被選取項目
+            partIdx: 0, // 記錄第二層選單的被選取項目
+            itemIdx: 0, // 記錄第三層選單的被選取項目
+            clothes: null,
+        })
+        onBeforeMount(() => {
+            axios.get("clothes.json").then(function (response) {
+                state.clothes = response.data.clothes;
+            }).catch(function (response) {
+                console.log(response);
+            })
+        })
+        const pickTypes = computed(() => {
+            return (state.clothes === null ? "" : state.clothes[state.genderIdx].types);
+        })
+        const pickContents = computed(() => {
+            return (state.clothes === null ? "" : state.clothes[state.genderIdx].types[state.partIdx].contents);
+        })
+        return { state, pickTypes, pickContents };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

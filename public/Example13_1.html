@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <h2>Vue Lifecycle beforeCreate & created (Look F12 Console Window)</h2>
+        <p ref="content">I am learning {{ state.name }}</p>
+        <button @click="changeText">Change Text</button>
+        <button @click="unmount">Unmount</button>
+    </div>
+</body>
+</html>
+<script>
+const { reactive, ref  } = Vue;
+const state = reactive({ name: "Vue" });
+console.log("-------------");
+console.log("beforeCreate");
+console.log("state.name: ", state.name);
+console.log("-------------");
+const app = {
+    setup(){
+        const content = ref(null);
+        const state = reactive({
+            name: "Vue",
+        })
+        function changeText(){
+            state.name = "Vue 3.x";
+        }
+        function unmount() {
+            myVue.unmount();
+        }
+        console.log("created");
+        console.log("state.name: ", state.name);
+        console.log("changeText: ", changeText);
+        console.log("ref: ", content.value);
+        console.log("-------------");
+        return { state, changeText, content, unmount };
+    }
+}
+const myVue = Vue.createApp(app);
+myVue.mount("#app");
+
+</script>

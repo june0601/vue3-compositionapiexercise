@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+        <p>Watch使用情境二</p>
+        <p>用戶姓名：
+        <input type="text" v-model="state.username2" placeholder="請輸入5~15個小寫英文，符號僅能使用@-_" size="50">
+        <span class="errorMessage">{{ state.errorMessage.usernameMsg }}</span>
+        </p>
+        <p>電子郵件：
+            <input type="text" v-model="state.email2" placeholder="請輸入電子郵件" size="25">
+            <span class="errorMessage">{{ state.errorMessage.emailMsg }}</span>
+        </p>
+        <p>登入密碼：
+            <input type="text" v-model="state.password2" placeholder="請輸入八個字以上，建議包含大小寫英文字母與數字" size="45">
+            <span class="errorMessage">{{ state.errorMessage.passwordMsg }}</span>
+        </p>
+        <p>密碼確認：
+            <input type="text" v-model="state.passwordConfirm2" placeholder="請再輸入一次密碼" size="45">
+            <span class="errorMessage">{{ state.errorMessage.passwordConfirmMsg }}</span>
+        </p>
+        <hr>
+        <p>Watch使用情境一</p>
+        <p>用戶姓名：
+        <input type="text" v-model="state.username" placeholder="請輸入5~15個小寫英文，符號僅能使用@-_" size="50">
+        <span class="errorMessage">{{ state.usernameMsg }}</span>
+        </p>
+        <hr>
+        <p>Height:<input type="number" v-model="state.height">CM</p>
+        <p>Weight:<input type="number" v-model="state.weight">KG</p>
+        <p>BMI: {{ state.bmi }}</p>
+        <p>Suggestion:{{ state.bmiMessage }}</p>
+    </div>
+</body>
+</html>
+<script>
+const { reactive, watch } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            height: 180,
+            weight: 80,
+            bmi: 24.69,
+            bmiMessage: "過重",
+            username: "",
+            username2:"",
+            email2:"",
+            password2:"",
+            passwordConfirm2:"",
+            errorMessage: {
+                usernameMsg: "",
+                emailMsg: "",
+                passwordMsg: "",
+                passwordConfirmMsg: "",
+            }
+        })
+        watch(() => [state.height, state.weight], () =>{
+            generateBMI();
+        })
+        watch(() => state.username, (value) =>{
+            state.username = state.username.replace(/[^a-zA-Z0-9_@-]/g, "");
+            const usernameReg = /^.{5,15}$/;
+            if (usernameReg.test(value)) {
+                state.usernameMsg = "";
+            } else {
+                state.usernameMsg = "請輸入5~15個字以上";
+            }
+        })
+        watch(() => state.username2, (value) =>{
+            state.username2 = state.username2.replace(/[^a-zA-Z0-9_@-]/g, "");
+            const usernameReg = /^.{5,15}$/;
+            if (usernameReg.test(value)) {
+                state.errorMessage.usernameMsg = "";
+            } else {
+                state.errorMessage.usernameMsg = "請輸入5~15個字以上";
+            }
+        })
+        watch(() => state.email2, (value) =>{
+            const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+            if (emailReg.test(value)) {
+                state.errorMessage.emailMsg = "";
+            } else {
+                state.errorMessage.emailMsg = "無效的電子郵件地址";
+            }
+        })
+        watch(() => state.password2, (value) =>{
+            let passwordLV = 0;
+            if (!/^.{8,}$/.test(value)) { // 八位數以上
+                state.errorMessage.passwordMsg = "請輸入八個字以上的密碼";
+            } else {
+                if (/\d+/.test(value)) { // 包含數字
+                    passwordLV++;
+                }
+                if (/[a-z]+/.test(value)) { // 包含小寫英文
+                    passwordLV++;
+                }
+                if (/[A-Z]+/.test(value)) { // 包含大寫英文
+                    passwordLV++;
+                }
+                if (passwordLV === 1) {
+                    state.errorMessage.passwordMsg = "弱";
+                } else if (passwordLV === 2) {
+                    state.errorMessage.passwordMsg = "中";
+                } else {
+                    state.errorMessage.passwordMsg = "強";
+                }
+            }
+        })
+        watch(() => state.passwordConfirm2, (value) =>{
+            if (state.password2 !== value) {
+                state.errorMessage.passwordConfirmMsg = "與密碼不符";
+            } else {
+                state.errorMessage.passwordConfirmMsg = "";
+            }
+        })
+        function generateBMI(){
+            state.bmi = (state.weight / (Math.pow((state.height / 100), 2))).toFixed(2);
+            if (state.bmi > 35) {
+                state.bmiMessage = "重度肥胖";
+            } else if (state.bmi >= 30 && state.bmi < 35) {
+                state.bmiMessage = "中度肥胖";
+            } else if (state.bmi >= 27 && state.bmi < 30) {
+                state.bmiMessage = "輕度肥胖";
+            } else if (state.bmi >= 24 && state.bmi < 27) {
+                state.bmiMessage = "過重";
+            } else if (state.bmi >= 18.5 && state.bmi < 24) {
+                state.bmiMessage = "正常範圍";
+            } else {
+                state.bmiMessage = "體重過輕";
+            }
+        }
+        return { state };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

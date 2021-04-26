@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <p>Look F12 Console Window</p>
+    <p>Height:<input type="number" v-model="state.height">CM</p>
+    <p>Weight:<input type="number" v-model="state.weight">KG</p>
+    <p>BMI:<input type="number" v-model="bmi"></p>
+    <p>Suggestion:{{ bmiMessage }}</p>
+</div>
+</body>
+</html>
+<script>
+const { reactive, computed } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            height: 180,
+            weight: 80,
+        })
+        const bmi = computed(() => {
+            console.log("Run BMI Computed");
+            return state.weight / (Math.pow((state.height / 100), 2));
+        })
+        const bmiMessage = computed(() => {
+            console.log("Run BMI Message Computed");
+            if (bmi.value > 35) {
+                return "重度肥胖";
+            } else if (bmi.value >= 30 && bmi.value < 35) {
+                return "中度肥胖";
+            } else if (bmi.value >= 27 && bmi.value < 30) {
+                return "輕度肥胖";
+            } else if (bmi.value >= 24 && bmi.value < 27) {
+                return "過重";
+            } else if (bmi.value >= 18.5 && bmi.value < 24) {
+                return "正常範圍";
+            } else {
+                return "體重過輕";
+            }
+        })
+        return { state, bmi, bmiMessage };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

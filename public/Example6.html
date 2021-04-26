@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <p>
+        <select v-model="state.type">
+            <option v-for="item in state.types" v-bind:value="item.value">{{ item.title }}</option> <!-- :value="item.value" -->
+        </select>
+    </p>
+    <p>
+        <select v-model="state.name">
+            <option v-for="item in state.names" v-bind:value="item.value">{{ item.title }}</option> <!-- :value="item.value" -->
+        </select>
+    </p>
+    <p>Type: {{ state.type }}</p>
+    <p>Framework: {{ state.name }}</p>
+    </div>
+</body>
+</html>
+<script>
+const { reactive } = Vue;
+const app = {
+    setup() {
+        const state = reactive({
+            type: "Frontend",
+            name: "Vue",
+            names:[
+                {title: "Vue", value: "Vue"},
+                {title: "React", value: "React"},
+                {title: "Angular", value: "Angular"},
+                {title: "Laravel", value: "Laravel"},
+                {title: "CakePHP", value: "CakePHP"},
+                {title: "Django", value: "Django"},
+            ],
+            types:[
+                {title: "Frontend", value: "Frontend"},
+                {title: "Backend", value: "Backend"},
+            ],
+        })
+        return { state };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

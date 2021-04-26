@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <h2>Vue Lifecycle beforeUnmount & unmounted (Look F12 Console Window)</h2>
+        <p ref="content">I am learning {{ state.name }}</p>
+        <button @click="changeText">Change Text</button>
+        <button @click="unmount">Unmount</button>
+    </div>
+</body>
+</html>
+<script>
+const { reactive, ref, onBeforeUnmount, onUnmounted } = Vue;
+const app = {
+    setup(){
+        const content = ref(null);
+        const state = reactive({ name: "Vue" });
+        onBeforeUnmount(() => {
+            console.log("[onBeforeUnmount]");
+            console.log("ref: ", content.value);
+            console.log("-------------");
+        })
+        onUnmounted(() => {
+            console.log("[onUnmounted]");
+            console.log("ref: ", content.value);
+            console.log("-------------");
+        })
+        function changeText(){
+            state.name = "Vue 3.x";
+        }
+        function unmount() {
+            myVue.unmount();
+        }
+        return { state, changeText, content, unmount };
+    }
+}
+const myVue = Vue.createApp(app);
+myVue.mount("#app"); //<==可以卸載
+//const myVue = Vue.createApp(app).mount("#app"); <==無法卸載
+</script>

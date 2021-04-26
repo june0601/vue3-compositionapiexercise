@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="main">
+        <div class="itemList">
+          <p>OPEN F12 Performance</p>
+          原本的DOM操作就是在每一次在CPU運算之後，直接把結果寫到硬碟當中.
+          <p id="pID">Item 1</p>
+        </div>
+      </div>
+    </div>
+    <button onClick="insertItems()">Go</button>
+  </div>
+</body>
+</html>
+<script>
+  var itemData = "";
+  function insertItems() {
+    for (var i = 1; i <= 100000; i++) {
+      itemData = "Item " + i
+      document.getElementById("pID").innerHTML = itemData;
+    }
+  }
+</script>

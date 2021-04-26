@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        button {
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <vuebutton5 title="iPhone"></vuebutton5>
+        <vuebutton5 title="iPad" :start="100"></vuebutton5>
+        <hr>
+        <vuebutton4 title="iPhone" start="10"></vuebutton4>
+        <vuebutton4 title="iPad" start="100"></vuebutton4>
+        <hr>
+        <vuebutton3 title="iPhone" start="10"></vuebutton3>
+        <vuebutton3 title="iPad" start="100"></vuebutton3>
+        <hr>
+        <vuebutton2 title="確定"></vuebutton2>
+        <vuebutton2 title="取消"></vuebutton2>
+        <hr>
+        <vuebutton></vuebutton>
+    </div>
+</body>
+</html>
+<script>
+    const myVue = Vue.createApp({})
+    myVue.component("vuebutton",{   //組件的名稱都必須使用小寫英文
+        template: `<button>我是按鈕</button>`
+    })
+    myVue.component("vuebutton2",{
+        props: ["title"], //全部小寫的英文字
+        template: `<button>{{ title }}</button>`
+    })
+    myVue.component("vuebutton3",{
+        props: ['title', 'start'],
+        template: `<button>{{ title }} 庫存 {{ start }} 件</button>`,
+    })
+    myVue.component("vuebutton4",{
+        /*
+        資料型態的部分有以下幾種：
+        String
+        Number
+        Boolean
+        Array
+        Object
+        Date
+        Function
+        Symbol
+        */
+        props: {
+            title: {
+                type: String,
+                required: true
+            },
+            start: {
+                type: String,
+                default: "0",
+            },
+        },
+        template: `<button>{{ title }} 庫存 {{ start }} 件</button>`,
+    })
+    myVue.component("vuebutton5",{
+    props: {
+        title: {
+            type: String,
+            required: true
+        },
+        start: {
+            type: Number,
+            default: 0,
+        },
+    },
+    template: `<button>{{ title }} 庫存 {{ start }} 件</button>`,
+})
+    myVue.mount("#app");
+</script>

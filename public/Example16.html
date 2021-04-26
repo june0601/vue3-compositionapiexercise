@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        button {
+            padding: 10px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-family: "微軟正黑體";
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>按鈕之後，去刪減庫存的數量，兩邊的數據是分開進行</h2>
+        (父層透過props來傳遞給子層)
+        <vuebutton title="iPhone" :start="30"></vuebutton>
+        <vuebutton title="iPad" :start="100"></vuebutton>
+    </div>
+</body>
+
+</html>
+
+<script>
+//組件資料和方法的應用，在使用組件的時候，各個子層可以有獨立的data與methods不會互相干擾
+const { reactive } = Vue;
+const myVue = Vue.createApp({});
+myVue.component("vuebutton", {
+    props: {
+        title: {
+            type: String,
+            required: true,
+        },
+        start: {
+            type: Number,
+            default: 0,
+        },
+    },
+    template: `<button @click="minus">{{ state.title }} 庫存 {{ state.start }} 件</button>`,
+    setup(props){
+        const state = reactive({
+            title: props.title,
+            start: props.start,
+        })
+        function minus(){
+            if (state.start <= 0) {
+                state.start = 0;
+            } else {
+                state.start--;
+            }
+        }
+        return{ state, minus }
+    },
+})
+myVue.mount("#app");
+</script>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <p>
+        <select @change="changeValue($event, 'type')">
+            <option value="Frontend">Frontend</option>
+            <option value="Backend">Backend</option>
+        </select>
+    </p>
+    <p>
+        <select @change="changeValue($event, 'name')">
+            <option value="Vue">Vue</option>
+            <option value="React">React</option>
+            <option value="Angular">Angular</option>
+            <option value="Laravel">Laravel</option>
+            <option value="CakePHP">CakePHP</option>
+            <option value="Django">Django</option>
+        </select>
+    </p>
+    <p>Type: {{ framework.type }}</p>
+    <p>Framework: {{ framework.name }}</p>
+</div>
+</body>
+</html>
+<script>
+const { reactive } = Vue;
+const app = {
+    setup(){
+        const framework = reactive({
+            type: "Frontend",
+            name: "Vue",
+        })
+        function changeValue(evt, id) {
+            framework[id] = evt.currentTarget.value;
+        }
+        return {framework, changeValue};
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

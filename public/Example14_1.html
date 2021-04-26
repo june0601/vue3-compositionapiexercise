@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <style>
+        .noteText {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in state.frameworks">
+                {{ item.type }}
+                <ul>
+                    <li v-for="itemDetail in item.content">
+                        {{ itemDetail.name }} ( {{ itemDetail.version }} )
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
+<script>
+const { reactive, onBeforeMount } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            frameworks: null,
+        })
+        onBeforeMount(() => {
+            axios.get("frameworks.json").then(function (response) {
+                state.frameworks = response.data.frameworks;
+            }).catch(function (response) {
+                console.log(response);
+            })
+        })
+        return { state };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

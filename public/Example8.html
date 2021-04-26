@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+    <p>
+        <input type="text" v-model="state.number3"> + 
+        <input type="text" v-model="state.number4"> = {{ fnresult() }}
+    </p>
+    <hr>
+    <p>
+        <input type="number" v-model="state.number1"> +
+        <input type="number" v-model="state.number2"> = {{ result }}
+    </p>
+    </div>
+</body>
+</html>
+<script>
+const { reactive, computed } = Vue;
+const app = {
+    setup(){
+        const state = reactive({
+            number1: 0,
+            number2: 0,
+            number3: 0,
+            number4: 0,
+        })
+        const result = computed(() => {
+            if(isNaN(state.number1) || isNaN(state.number2)){
+                return "Error!! Please enter the number."
+            }else{
+                return parseFloat(state.number1) + parseFloat(state.number2);
+            }
+        })
+        function fnresult(){
+            if(isNaN(state.number3) || isNaN(state.number4)){
+                return "Error!! Please enter the number."
+            }else{
+                return parseFloat(state.number3) + parseFloat(state.number4);
+            }
+        }
+        return { state, result,fnresult };
+    }
+}
+const myVue = Vue.createApp(app).mount("#app");
+</script>

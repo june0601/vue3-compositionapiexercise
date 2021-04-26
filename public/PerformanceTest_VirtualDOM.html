@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title></title>
+	<script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+	<div id="app">
+		<div class="wrapper">
+			<div class="container">
+				<div class="main">
+					<div class="itemList">
+                    <p>OPEN F12 Performance</p>
+                    Virtual DOM就是在CPU與硬碟間加入了記憶體層，CPU運算後先將結果儲存在記憶體中，最後再將記憶體的資料一次性的寫入硬碟。
+						<p id="pID">{{ state.message }}</p>
+					</div>
+				</div>
+			</div>
+			<button @click="insertItems">Go</button>
+		</div>
+	</div>
+</body>
+
+</html>
+<script>
+	const { reactive } = Vue;
+	const app = {
+		setup(){
+			const state = reactive({
+				message: 'Item 1'
+			})
+			function insertItems(){
+				for (let i = 1; i <= 100000; i++) {
+					state.message = "Item " + i;
+				}
+			}
+			return { state, insertItems }
+		}	
+	}
+	const myVue = Vue.createApp(app).mount("#app");
+</script>
